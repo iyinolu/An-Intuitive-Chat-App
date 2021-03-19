@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     'chat',
     'userprofile',
     'channels',
+    'bootstrap',
+    'fontawesome',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
