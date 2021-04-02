@@ -24,13 +24,13 @@ body {
 #chat-container {
     display: grid;
     grid: 
-        'search-container chat-title' 71px
-        'conversation-list chat-message-list' 1fr
-        'new-message-container chat-form' 78px
+        'search-container chat-title' 1fr
+        'conversation-list chat-message-list' 7fr
+        'new-message-container chat-form' 1fr
         / 275px 1fr; 
     min-width: 800px;
     max-width: 1000px;
-    max-height: 800px;
+    max-height: 1000px;
     height: 95vh;
     width: 100%;
     background: #FFF;
@@ -180,6 +180,7 @@ body {
     flex-direction: column-reverse;
     padding: 0 20px;
     overflow-y: scroll;
+    border-left: 1px solid #777;
 }
 
 .message-row {
@@ -242,7 +243,7 @@ body {
 
 #chat-form {
     display: grid;
-    grid: 51px / 32px 1fr;
+    grid: 51px / 32px 1fr 20px;
     align-content: center;
     align-items: center;
     grid-gap: 15px;
