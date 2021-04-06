@@ -2,6 +2,8 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+`NOTE:` All available scripts apply to the frontend folder only!
+
 ## Available Scripts
 
 In the project directory, you can run:
