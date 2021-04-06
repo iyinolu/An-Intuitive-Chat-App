@@ -18,8 +18,11 @@ from django.urls import path
 from rest_framework_jwt.views import obtain_jwt_token
 from django.urls.conf import include
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),    
     path('', include('chat.urls')),
+    path('', include('userprofile.urls')),
     path('token-auth/', obtain_jwt_token)    
+    
 ]

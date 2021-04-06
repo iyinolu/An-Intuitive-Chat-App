@@ -72,7 +72,7 @@ JWT_AUTH = {
 }
 
 CORS_ORIGIN_WHITELIST = (
-    'https://localhost:3000',
+    'http://localhost:3000', 
 )
 
 TEMPLATES = [
@@ -93,6 +93,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'chat_config.wsgi.application'
 ASGI_APPLICATION = 'chat_config.asgi.application'
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',

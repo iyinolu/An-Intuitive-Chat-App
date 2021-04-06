@@ -3,6 +3,7 @@ import paperclip from './utils/paperclip.svg';
 import wastebin from './utils/trash.svg';
 import defaultimg from './utils/default.png';
 import WebSocketInstance from '../websocket';
+import Sidepanel from './sidepanel/Sidepanel';
 
 class Chat extends React.Component {
 
@@ -100,32 +101,7 @@ class Chat extends React.Component {
                 <div id="search-container">
                     <input type="text" placeholder="Search" />
                 </div>
-                <div id="conversation-list">
-                    <div className="conversation active">
-                        <img height="20px" width="40px" src={defaultimg} alt="" />
-                        <div className="title-text">
-                            Defaut User agjgergg dsfadf dsafsf dsd ds
-                        </div>
-                        <div className="created-date">
-                            Apr 16
-                        </div>
-                        <div className="conversation-message">
-                            This a message sggsa adasdadgrefd dsdwdw fd
-                        </div>
-                    </div>
-                    <div className="conversation active">
-                        <img height="20px" width="40px" src={defaultimg} alt="" />
-                        <div className="title-text">
-                            Defaut User agjgergg dsfadf dsafsf dsd ds
-                        </div>
-                        <div className="created-date">
-                            Apr 16
-                        </div>
-                        <div className="conversation-message">
-                            This a message sggsa adasdadgrefd dsdwdw fd
-                        </div>
-                    </div>
-                </div>
+                
                 <div id="new-message-container">
                     <a href="">+</a>
 
@@ -136,6 +112,8 @@ class Chat extends React.Component {
                     <span> Default Chat </span>
                     <img src={wastebin} alt="Delete Conversation" />
                 </div>
+
+                <Sidepanel text='hello world'/>
 
                 {/* chat content section */}
                 <div id="chat-message-list">
