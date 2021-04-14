@@ -27,7 +27,6 @@ class ChatConsumer(WebsocketConsumer):
         if room:
             room_id = room.id
             message = Message.objects.filter(chatroom=room_id).all()
-    
             content = {
                 'command': 'messages',
                 'messages': self.messagesJson(message)
@@ -94,7 +93,6 @@ class ChatConsumer(WebsocketConsumer):
     
     def receive(self, text_data):
         data = json.loads(text_data)
-        print(data)
         self.commands[data['command']](self, data)
 
         async_to_sync(self.channel_layer.group_send)(
@@ -119,7 +117,6 @@ class ChatConsumer(WebsocketConsumer):
     # Receive message from room group
     def chat_message(self, event):
         message = event['message']
-        print(message)
 
         # Send message to WebSocket
         # async_to_sync(self.send(text_data=json.dumps(

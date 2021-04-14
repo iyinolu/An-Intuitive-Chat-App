@@ -1,9 +1,15 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import paperclip from './utils/paperclip.svg';
 import wastebin from './utils/trash.svg';
 import defaultimg from './utils/default.png';
-import WebSocketInstance from '../websocket';
-import Sidepanel from './sidepanel/Sidepanel';
+import WebSocketInstance from '../../websocket';
+import ChatRoomList from './chatlist/chatroomlist'
+import Search from './search/chatsearch';
+import ChatArea from './chatarea/ChatArea';
+import { NewChatRoom } from './chatlist/chatroom';
+import ChatTitle from './navigation/chattitle';
+import MessageInput from './textinput/messageinput';
 
 class Chat extends React.Component {
 
@@ -45,37 +51,6 @@ class Chat extends React.Component {
             message: event.target.value
         })
     }
-    renderMessages = (messages) => {
-        const currentUser = 'admin';
-        if (messages.id === 3) {
-            return messages.map(message => (
-                <div key={message.id} className={"message-row you-message"}>
-                        <div className={"message-content"}>
-                            <img height="40px" width='40px' src={defaultimg} alt="default user" />
-                        <div className="message-text">
-                            {message.content}
-                        </div>
-                        <div className={"message-time"}>
-                            Apr 16
-                        </div>  
-                    </div>
-                </div>
-            ))
-        }
-        else {
-            return messages.map(message => (
-                <div key={message.id}
-                className={"message-row you-message"}>
-                        <div className={"message-content"}>    
-                            <div className="message-text">
-                                {message.content}
-                            </div>
-                        <div className={"message-time"}>Apr 16</div>
-                    </div>
-                </div>
-            ))
-        }
-    };
 
     waitForSocketConnection(callback) {
         const component = this;
@@ -98,79 +73,18 @@ class Chat extends React.Component {
         const messages = this.state.messages;
         return (
             <div id="chat-container">
-                <div id="search-container">
-                    <input type="text" placeholder="Search" />
-                </div>
-                
-                <div id="new-message-container">
-                    <a href="">+</a>
-
-                </div>
-
+                {/* chat sidepanel section */}
+                <Search />
+                {/* start new chat section */}
+                <NewChatRoom />
                 {/* chat section header */}
-                <div id="chat-title">
-                    <span> Default Chat </span>
-                    <img src={wastebin} alt="Delete Conversation" />
-                </div>
-
-                <Sidepanel text='hello world'/>
-
+                <ChatTitle />
+                {/* chat sidepanel section */}
+                <ChatRoomList text='hello world'/>
                 {/* chat content section */}
-                <div id="chat-message-list">
-                    {
-                        messages &&
-                        this.renderMessages(messages)
-                    }
-                    <div className="message-row you-message">
-                        <div className="message-content">
-                            <div className="message-text">ok then</div>
-                            <div className="message-time">Apr 16</div>
-                        </div> 
-                    </div>
-                    <div className="message-row other-message">
-                        <div className="message-content">
-                            <img height="40px" width='40px' src={defaultimg} alt="default user" />
-                            <div className="message-text">
-                                Yeah I think it's best we do that. Otherwise things won't
-                                work well at all. I'm adding more text here to test the sizing
-                                of the speech bubble and the wrapping of it too.
-                            </div>
-                            <div className="message-time">Apr 16</div>
-                        </div>
-                    </div>
-                    <div className="message-row you-message">
-                        <div className="message-content">
-                            <div className="message-text">ok then</div>
-                            <div className="message-time">Apr 16</div>
-                        </div> 
-                    </div>
-                    <div className="message-row other-message">
-                        <div className="message-content">
-                            <img height="40px" width='40px' src={defaultimg} alt="default user" />
-                            <div className="message-text">
-                                Yeah I think it's best we do that. Otherwise things won't
-                                work well at all. I'm adding more text here to test the sizing
-                                of the speech bubble and the wrapping of it too.
-                            </div>
-                            <div className="message-time">Apr 16</div>
-                        </div>
-                    </div>
-                </div>
-                
-
+                <ChatArea messages={this.state.messages}/>
                 {/* chat input section */}
-                
-                <form id="chat-form" onSubmit={this.sendMessageHandler}>
-                    <a href='#'><img src={paperclip} alt="Add Attachment" /></a>
-                    <input 
-                        onChange={this.messageChangeHandler}
-                        type="text" 
-                        placeholder="type a message" 
-                        value={this.state.message}
-                    />
-                    <button type='submit'></button>
-                </form>
-                
+                <MessageInput ws_conn={WebSocketInstance} />
             </div>
         )
     }

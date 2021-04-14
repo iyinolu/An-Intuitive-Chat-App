@@ -43,7 +43,7 @@ class WebSocketService {
         const parsedData = JSON.parse(data);
         const command = parsedData.command;
 
-        if (Object.keys(this.callbacks).length == 0) {
+        if (Object.keys(this.callbacks).length === 0) {
             return;
         }
         // get state messages
@@ -68,7 +68,7 @@ class WebSocketService {
     newChatMessages(message) {
         this.sendMessage({ 
             command: 'new_message', 
-            from: message.from, 
+            from: message.from,
             message: message.content 
         });
     }
@@ -86,9 +86,7 @@ class WebSocketService {
             console.log(err);
         }
     }
-    state() {
-        return this.socketRef.readyState;
-    }
+
     waitForSocketConnection(callback) {
         const socket = this.socketRef;
         const recursion = this.waitForSocketConnection;

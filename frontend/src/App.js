@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useEffect } from 'react';
 import Chat from './components/container/Chat'; 
-import WebSocketInstance from './components/websocket';
+import WebSocketInstance from './websocket';
 
 function App() {
   useEffect( () => {
@@ -9,7 +9,7 @@ function App() {
   }, [] )
   
   return (
-    <Chat />
+    <Chat currentuser='admin' />
   );
 }
 
