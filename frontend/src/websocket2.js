@@ -1,4 +1,3 @@
-
 class WebSocketService {
 
     static instance = null;
@@ -18,10 +17,14 @@ class WebSocketService {
     }
 
     connect(room) {
-        
-        console.log('room')
-        this.path = `ws://127.0.0.1:8000/ws/chat/${room}/`;
-        
+        if (room) {
+            console.log('room')
+            this.path = `ws://127.0.0.1:8000/ws/chat/${room}/`;
+        }
+        else {
+            console.log('No room')
+            this.path = 'ws://127.0.0.1:8000/ws/chat/';
+        }
         this.socketRef = new WebSocket(this.path)
         
         this.socketRef.onopen = () => {

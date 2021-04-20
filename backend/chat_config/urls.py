@@ -23,6 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),    
     path('', include('chat.urls')),
     path('', include('userprofile.urls')),
+    # view to handle login (return a jwt token to handle later requests)
     path('token-auth/', obtain_jwt_token)    
-    
 ]

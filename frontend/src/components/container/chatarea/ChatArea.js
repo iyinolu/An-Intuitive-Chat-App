@@ -39,44 +39,11 @@ export default function ChatArea(props) {
 
     return (
         <div id="chat-message-list">
-                    {
-                        messages &&
-                        renderMessages(messages)
-                    }
-                    <div className="message-row you-message">
-                        <div className="message-content">
-                            <div className="message-text">ok then</div>
-                            <div className="message-time">Apr 16</div>
-                        </div> 
-                    </div>
-                    <div className="message-row other-message">
-                        <div className="message-content">
-                            <img height="40px" width='40px' src={defaultimg} alt="default user" />
-                            <div className="message-text">
-                                Yeah I think it's best we do that. Otherwise things won't
-                                work well at all. I'm adding more text here to test the sizing
-                                of the speech bubble and the wrapping of it too.
-                            </div>
-                            <div className="message-time">Apr 16</div>
-                        </div>
-                    </div>
-                    <div className="message-row you-message">
-                        <div className="message-content">
-                            <div className="message-text">ok then</div>
-                            <div className="message-time">Apr 16</div>
-                        </div> 
-                    </div>
-                    <div className="message-row other-message">
-                        <div className="message-content">
-                            <img height="40px" width='40px' src={defaultimg} alt="default user" />
-                            <div className="message-text">
-                                Yeah I think it's best we do that. Otherwise things won't
-                                work well at all. I'm adding more text here to test the sizing
-                                of the speech bubble and the wrapping of it too.
-                            </div>
-                            <div className="message-time">Apr 16</div>
-                        </div>
-                    </div>
-                </div>
+            {
+                messages &&
+                renderMessages(messages)
+            }
+                    
+        </div>
     )
 }

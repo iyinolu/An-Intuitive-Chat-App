@@ -3,6 +3,7 @@ from channels.generic.websocket import WebsocketConsumer, async_to_sync
 from django.core.checks import messages
 from .models import Message, Room
 from django.contrib.auth.models import User
+from .serializers import RoomSerializer
 # from channels.auth import channel_session_user, channel_session_user_from_http
 
 class ChatConsumer(WebsocketConsumer):
@@ -21,6 +22,7 @@ class ChatConsumer(WebsocketConsumer):
                 'chatroomname': msg.chatroom.room_name
             })
         return dump
+            
     
     def fetch_messages(self, data):
         room = Room.objects.filter(room_name=self.room_group_name).first()
@@ -38,7 +40,17 @@ class ChatConsumer(WebsocketConsumer):
 
         # Send msg to the websocket server
         # Handle if no room name
-
+    def fetch_chat_rooms(self, data):
+        # NOTE: Add id to user data in frontend
+        user = User.objects.filter(username=data['username']).first()
+        id = user.id
+        rooms = Room.objects.filter(friend_id=id).all() | Room.objects.filter(you_id=id).all()
+        # serialize_rooms = 
+        async_to_sync(self.send(text_data=json.dumps({
+            'command': 'add_chatroom',
+            'rooms': [RoomSerializer(room).data for room in rooms]
+            }
+        )))
 
     def new_message(self, data):
         room = Room.objects.filter(room_name=self.room_group_name).first()
@@ -62,19 +74,22 @@ class ChatConsumer(WebsocketConsumer):
                 'messages': self.messagesJson(Message.objects.filter(id=new_msg.id))[0]
             }
         )))
-        
+
     # To Trigger Specific Actions
     commands = {
         'fetch_messages': fetch_messages,
-        'new_message': new_message
+        'new_message': new_message,
+        'fetch_chat_rooms': fetch_chat_rooms
     }
 
-    def connect(self):    
+    def connect(self):
+        print('got here')
         self.user = self.scope['user']
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
-
+        print(self.room_name)
         # Join room group
+        # TODO: Find how to limit no of users listening in a channel layer
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name

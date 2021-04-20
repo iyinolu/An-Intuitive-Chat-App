@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useEffect } from 'react';
 import paperclip from './utils/paperclip.svg';
 import wastebin from './utils/trash.svg';
 import defaultimg from './utils/default.png';
@@ -10,51 +10,35 @@ import ChatArea from './chatarea/ChatArea';
 import { NewChatRoom } from './chatlist/chatroom';
 import ChatTitle from './navigation/chattitle';
 import MessageInput from './textinput/messageinput';
+import { useDispatch, connect} from 'react-redux';
+import store from '../../store'
+
 
 class Chat extends React.Component {
 
     constructor(props) {
-        super(props);
-        this.state = {};
-
+        super(props)
+        console.log(this.props.username)
         this.waitForSocketConnection(() => {
             WebSocketInstance.addCallbacks(
                 this.setMessages.bind(this),
-                this.addMessage.bind(this));
-            WebSocketInstance.fetchMessages(this.props.currentUser);
+                this.addMessage.bind(this),
+                this.addChatRooms.bind(this));
+            WebSocketInstance.fetchRooms(this.props.username)
         });
+    }    
+    addChatRooms(rooms) {
+        this.props.addChatRoom(rooms)
     }
     addMessage(message) {
-        const append_msg = this.state.messages.unshift(message);
-        this.setState({
-            messages: this.state.messages
-        });
+        //TODO: call appropriate dispatch function
     }
     setMessages(messages) {
-        this.setState({
-            messages: messages.reverse()
-        })
-    }
-    sendMessageHandler = e => {
-        e.preventDefault();
-        const messageObject = {
-            from: 'admin',
-            content: this.state.message
-        }
-        WebSocketInstance.newChatMessages(messageObject);
-        this.setState({
-            message: ''
-        });
-    }
-    messageChangeHandler = event => {
-        this.setState({
-            message: event.target.value
-        })
+        //TODO: call appropriate dispatch function
     }
 
     waitForSocketConnection(callback) {
         const component = this;
-        const recursion = this.waitForSocketConnection;
         setTimeout (
             function () {
                 if (WebSocketInstance.state() === 1) {
@@ -70,7 +54,6 @@ class Chat extends React.Component {
     };
 
     render() {
-        const messages = this.state.messages;
         return (
             <div id="chat-container">
                 {/* chat sidepanel section */}
@@ -80,9 +63,9 @@ class Chat extends React.Component {
                 {/* chat section header */}
                 <ChatTitle />
                 {/* chat sidepanel section */}
-                <ChatRoomList text='hello world'/>
+                <ChatRoomList ws_conn={WebSocketInstance}/>
                 {/* chat content section */}
-                <ChatArea messages={this.state.messages}/>
+                <ChatArea />
                 {/* chat input section */}
                 <MessageInput ws_conn={WebSocketInstance} />
             </div>
@@ -90,4 +73,19 @@ class Chat extends React.Component {
     }
 }
 
-export default Chat 
+const mapDispatchToProps = dispatch => ({
+    addChatRoom: chatrooms => {
+        dispatch({type:'chat/chatAddRooms', payload: chatrooms })
+    },
+    addMessages: messages => {
+        dispatch({type:''})
+    }
+})
+
+const mapStateToProps = (state) => {
+    return {
+        username : state.authenticate.username
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chat)

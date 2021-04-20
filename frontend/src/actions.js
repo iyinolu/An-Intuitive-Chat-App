@@ -1,0 +1,1 @@
+const LoggedIn = "auth/authLoggedIn"

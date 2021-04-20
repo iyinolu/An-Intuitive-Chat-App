@@ -22,6 +22,7 @@ class UserSerializerWithToken(serializers.ModelSerializer):
         return token
 
     def create(self, validated_data):
+        print('create called')
         password = validated_data.pop('password', None)
         instance = self.Meta.model(**validated_data)
         if password is not None:
