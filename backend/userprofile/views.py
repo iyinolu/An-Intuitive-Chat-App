@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from rest_framework import permissions, serializers, status
@@ -12,8 +11,8 @@ from .serializers import UserSerializer, UserSerializerWithToken
 @api_view(['GET'])
 def current_user(request):
     print(request.user)
+    # Serializer determines what data gets return on each request
     serializer = UserSerializer(request.user)
-
     return Response(serializer.data)
 
 
@@ -21,6 +20,7 @@ def user_view(request):
     permission_classes = (permissions.AllowAny)
 
     def post(self, request, format=None):
+        print(request)
         serializer = UserSerializerWithToken(data=request.data)
         if serializer.is_valid():
             serializer.save()

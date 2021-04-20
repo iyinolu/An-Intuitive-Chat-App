@@ -6,7 +6,7 @@ import ChatRoom from './chatroom'
 export default function ChatRoomList(props) {
     return(
         <div id="conversation-list">
-            <ChatRoom />
+            <ChatRoom ws_conn = {props.ws_conn} />
         </div>
     )
 }
