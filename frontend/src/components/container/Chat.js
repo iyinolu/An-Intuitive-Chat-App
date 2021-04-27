@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import paperclip from './utils/paperclip.svg';
 import wastebin from './utils/trash.svg';
 import defaultimg from './utils/default.png';
-import WebSocketInstance from '../../websocket';
+import WebSocketInstance, { WebSocketService } from '../../websocket';
 import ChatRoomList from './chatlist/chatroomlist'
 import Search from './search/chatsearch';
 import ChatArea from './chatarea/ChatArea';
@@ -18,40 +18,40 @@ class Chat extends React.Component {
 
     constructor(props) {
         super(props)
-        console.log(this.props.username)
-        this.waitForSocketConnection(() => {
-            WebSocketInstance.addCallbacks(
-                this.setMessages.bind(this),
-                this.addMessage.bind(this),
-                this.addChatRooms.bind(this));
-            WebSocketInstance.fetchRooms(this.props.username)
-        });
+        
+        // this.waitForSocketConnection(() => {
+        //     WebSocketInstance.addCallbacks(
+        //         this.setMessages.bind(this),
+        //         this.addMessage.bind(this),
+        //         this.addChatRooms.bind(this));
+        //     WebSocketInstance.fetchRooms(this.props.username)
+        // });
     }    
-    addChatRooms(rooms) {
-        this.props.addChatRoom(rooms)
-    }
-    addMessage(message) {
-        //TODO: call appropriate dispatch function
-    }
-    setMessages(messages) {
-        //TODO: call appropriate dispatch function
-    }
+    // addChatRooms(rooms) {
+    //     this.props.addChatRoom(rooms)
+    // }
+    // addMessage(message) {
+    //     //TODO: call appropriate dispatch function
+    // }
+    // setMessages(messages) {
+    //     //TODO: call appropriate dispatch function
+    // }
 
-    waitForSocketConnection(callback) {
-        const component = this;
-        setTimeout (
-            function () {
-                if (WebSocketInstance.state() === 1) {
-                    console.log('connection is secure');
-                    callback();
-                    return;            
-                }
-                else {
-                    console.log('waiting for connection')
-                    component.waitForSocketConnection(callback);
-                }
-            }, 100);
-    };
+    // waitForSocketConnection(callback) {
+    //     const component = this;
+    //     setTimeout (
+    //         function () {
+    //             if (WebSocketInstance.state() === 1) {
+    //                 console.log('connection is secure');
+    //                 callback();
+    //                 return;            
+    //             }
+    //             else {
+    //                 console.log('waiting for connection')
+    //                 component.waitForSocketConnection(callback);
+    //             }
+    //         }, 100);
+    // };
 
     render() {
         return (
@@ -63,29 +63,15 @@ class Chat extends React.Component {
                 {/* chat section header */}
                 <ChatTitle />
                 {/* chat sidepanel section */}
-                <ChatRoomList ws_conn={WebSocketInstance}/>
+                <ChatRoomList />
                 {/* chat content section */}
                 <ChatArea />
                 {/* chat input section */}
-                <MessageInput ws_conn={WebSocketInstance} />
+                <MessageInput />
             </div>
         )
     }
 }
 
-const mapDispatchToProps = dispatch => ({
-    addChatRoom: chatrooms => {
-        dispatch({type:'chat/chatAddRooms', payload: chatrooms })
-    },
-    addMessages: messages => {
-        dispatch({type:''})
-    }
-})
 
-const mapStateToProps = (state) => {
-    return {
-        username : state.authenticate.username
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Chat)
+export default Chat

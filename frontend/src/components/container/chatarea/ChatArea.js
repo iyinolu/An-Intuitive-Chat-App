@@ -1,9 +1,16 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import defaultimg from '../utils/default.png';
+import { useSelector } from 'react-redux';
+
 
 export default function ChatArea(props) {
-    const messages = props.messages
+    const messages = useSelector(state => state.chatroom.messages.filter(message => {
+            if (message.chatroom === state.chatroom.current_room) {
+                return message
+            }
+        })
+    )
 
     const renderMessages = (messages) => {
         const currentUser = 'admin';
