@@ -8,13 +8,7 @@ import { useSelector } from 'react-redux'
 
 function App() {
   const isLoggedIn = useSelector(state => state.authenticate.isAuth)
-  
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     // WebSocketInstance.connect('second_room');
-  //   }
-  // })
-  
+
   const chatWindow = <Chat currentuser='admin' />
   const authWindow = <Auth />
   return <div> {isLoggedIn ? chatWindow : authWindow} </div>

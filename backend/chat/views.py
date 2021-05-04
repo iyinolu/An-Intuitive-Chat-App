@@ -1,7 +1,8 @@
 from django.core.checks import messages
+from django.db.models import query
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from django.http.response import HttpResponse
+from django.http.response import Http404, HttpResponse
 
 from chat.models import Message, Room
 from chat.serializers import MessageSerializer, RoomSerializer
@@ -41,12 +42,52 @@ def get_messages(request, room_id):
     serializer = MessageSerializer(messages, many=True)
     return Response(serializer.data)
     
-    
-
-
 
 
 class MessagesList(generics.GenericAPIView):
     serializer_class = MessageSerializer
     lookup_field = 'chatroom_id'
     queryset = Message.objects.all()
+
+
+class MultipleRoomLookupMixin:
+    '''
+    Mixin to lookup multiple model fields given a 
+    single lookup_field parameter
+    '''
+    def get_object(self):
+        queryset = self.get_queryset()
+        queryset = self.filter_queryset(queryset)
+        filter_pairs = []
+        for field in self.lookup_field:
+            filter_pairs.append({field: self.kwargs[self.lookup_url_kwarg]})
+
+        obj = self.custom_get_object_or_404(filter_pairs)
+        return obj
+
+class TestGetRoom(MultipleRoomLookupMixin, generics.RetrieveAPIView):
+    '''
+    Endpoint for returning chatroom queryset response
+    '''
+    serializer_class = RoomSerializer
+    queryset = Room.objects.all()
+    lookup_field = ['you_id', 'friend_id']
+    lookup_url_kwarg = 'id'
+
+    def custom_get_object_or_404(self, filter_pairs):
+        queryset = self.get_queryset()
+        try:
+            return queryset.filter(you_id=filter_pairs[0]['you_id']) | queryset.filter(friend_id=filter_pairs[1]['friend_id'])
+        except AttributeError:
+            raise ValueError('Input the user id should be a string')
+        except queryset.model.DoesNotExist:
+            raise Http404('No model found')
+
+    def get_serializer(self, *args, **kwargs):
+        """
+        Return the serializer instance that should be used for validating and
+        deserializing input, and for serializing output.
+        """
+        serializer_class = self.get_serializer_class()
+        kwargs.setdefault('context', self.get_serializer_context())
+        return serializer_class(*args, **kwargs, many=True)

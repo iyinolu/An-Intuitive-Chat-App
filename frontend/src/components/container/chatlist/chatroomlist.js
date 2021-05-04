@@ -3,6 +3,7 @@ import React from 'react';
 import ChatRoom from './chatroom'
 import WebSocketService2 from '../../../websocket2';
 import {connect} from 'react-redux'
+import {fetchrooms} from '../../reducerSlice/chat_slice';
 
 
 class ChatRoomList extends React.Component {
@@ -11,28 +12,11 @@ class ChatRoomList extends React.Component {
         this.state = {}
     } 
     componentDidMount() {
-        fetch(`http://localhost:8000/chatroom/${this.props.username}/`, {
-            method: 'GET',
-            headers: {
-                Authorization: `JWT ${localStorage.getItem('token')}`
-            }  
-        })
-        .then(res => res.json())
-        .then(json => {
-            if (json.length > 0) { 
-                json.map(room => {
-                    room['connection'] = new WebSocketService2(room.room_name)
-                    this.setState({rooms: json})
-                })
-            }
-            console.log(json)
-            this.props.addChatRooms(json)            
-        })   
+        this.props.addChatRooms(fetchrooms);
     }
     render() {
-        console.log(this.state)
-        if (this.state.rooms instanceof Array) {
-            this.chatList = this.state.rooms.map(room => {
+        if (this.props.room_list.length > 0) {
+            this.chatList = this.props.room_list.map(room => {
                 return(
                     <ChatRoom room_info = {room} key={room.id}/>
                 )
@@ -50,16 +34,8 @@ class ChatRoomList extends React.Component {
 }
                     
 const mapDispatchToProps = dispatch => ({
-    recieveMessages: chatrooms => {
-        dispatch({type:'chat/chatAddNewMessage', payload: chatrooms })
-    },
-    addMessages: messages => {
-        dispatch({type:'chat/chatLoadMessages', payload: messages})
-    },
-    addChatRooms: rooms => {
-        if (rooms instanceof Array){
-            dispatch({type:'chat/chatAddRooms', payload: rooms})
-        }
+    addChatRooms: func => {
+        dispatch(func)
     },
     addConnections: connection => {
         dispatch({type: 'chat/chatAddConnection', payload: connection})
@@ -67,11 +43,13 @@ const mapDispatchToProps = dispatch => ({
     connectChatRooms: () => {
         dispatch({type: 'chat/chatConnectChats', payload:''})
     }
+    
 })
 
 const mapStateToProps = state => {
     return {
         username : state.authenticate.username,
+        room_list : state.chatroom.room_list
     }
 }
 

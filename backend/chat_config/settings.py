@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'fontawesome',
     'crispy_forms',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +66,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
 }
+
 
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'chat_config.utils.custom_jwt_response_handler'

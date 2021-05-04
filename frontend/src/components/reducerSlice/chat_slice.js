@@ -1,13 +1,14 @@
 import React from 'react';
+import WebSocketService2 from '../../websocket2';
 
 const initialState = {
     room_list: [],
-    messages: [],
+    messages:{},
     current_room: null,
     room_list_ids:[]
 }
 
-export function chatReducer(state=initialState, action) {
+export default function chatReducer(state=initialState, action) {
     switch (action.type) {
         case 'chat/chatAddRooms': {
             return ({
@@ -22,10 +23,10 @@ export function chatReducer(state=initialState, action) {
             console.log(action.payload)
             return({
                 ...state,
-                messages: [
+                messages: {
                     ...state.messages,
                     ...action.payload
-                ]
+                }
             })
         }
         case 'chat/chatAddNewMessage': {
@@ -42,14 +43,18 @@ export function chatReducer(state=initialState, action) {
             })
         }
         case 'chat/chatSendMessage': {
+            var id = state.current_room 
+            var new_messages = {
+                ...state.messages
+            }
+            new_messages[id] = [
+                ...state.messages[id],
+                action.payload
+            ]
             return({
                 ...state,
-                messages: [
-                    ...state.messages,
-                    action.payload
-                ]
-            
-            })
+                messages: new_messages
+            })        
         }
         case 'chat/chatAddRoomId': {
             return {
@@ -60,36 +65,60 @@ export function chatReducer(state=initialState, action) {
                 ]
             }
         }
-        // case 'chat/chatConnectChats': {
-        //     return {
-        //         ...state,
-        //         room_list: state.room_list.map(room => {
-        //             if (room.connection.readyState() !== 1){
-        //                 room.connection.connect()
-        //                 setTimeout (() => {
-        //                     if (room_connection.state() === 1) {
-        //                         console.log(`${room.room_name} connection is secure`);
-        //                         callback();
-        //                         return;            
-        //                     }
-        //                     else {
-        //                         console.log('waiting for connection')
-        //                         waitForSocketConnection(callback);
-        //                     }
-        //                 }, 100);
-        //                 return room
-        //             }
-        //             else {
-        //                 return room
-        //             }
-        //         })
-        //     }
-        // }
-
         default: {
             return state
         }
     }
 }
 
-export default chatReducer;
+export function fetchrooms(dispatch, getState) {
+    const userid = getState().authenticate.id
+    const waitForSocketConnection = (room) => { 
+        if (room['connection'].state() === 1) {
+            console.log(`${room.room_name} connection is secure`);
+            return;
+        }
+        else {
+            room['connection'].connect()
+            setTimeout (() => {
+                if (room['connection'].state() === 1) {
+                    console.log(`${room.room_name} connection is secure`);
+                    return;            
+                }
+                else {
+                    console.log('waiting for connection')
+                    waitForSocketConnection(room);
+                }
+            }, 1000);
+        }
+    };
+    fetch(`http://localhost:8000/chatrooms/${userid}/`, {
+            method: 'GET',
+            headers: {
+                Authorization: `JWT ${localStorage.getItem('token')}`
+            }  
+        })
+        .then(res => res.json())
+        .then(json => {
+            if (json.length > 0) { 
+                    json.map(room => {
+                        console.log('create connection')
+                        room['connection'] = new WebSocketService2(room.room_name)
+                        waitForSocketConnection(room)
+                        return room
+                    }
+                ) 
+                return json
+            }
+            else {
+                return json
+            }    
+        })
+        .then(rooms => {
+            console.log(localStorage.getItem('token'))
+            console.log(rooms)
+            dispatch({type:'chat/chatAddRooms', payload: rooms})
+        })   
+
+}
+

@@ -6,13 +6,6 @@ class WebSocketService2 {
         this.room_name = room_name;
         this.socketRef = 0;
     }
-    // static instance = null;
-    // static getInstance() {
-    //     if (!WebSocketService2.instance) {
-    //         WebSocketService2.instance = new WebSocketService2();
-    //     }
-    //     return WebSocketService2.instance;
-    // }
 
     callbacks = {};
    
@@ -50,8 +43,11 @@ class WebSocketService2 {
             store.dispatch({type:'', payload:''})
         }
         if (command === 'new_message') {
-            console.log(parsedData)
-            store.dispatch({type:'chat/chatSendMessage', payload: parsedData.messages})
+            const current_room = store.getState().chatroom.current_room
+            console.log(current_room)
+            if (current_room === parsedData.messages.chatroom){
+                store.dispatch({type:'chat/chatSendMessage', payload: parsedData.messages})
+            }                
         }
         if (command === 'add_chatroom') {
             store.dispatch({type:'', payload:''})
@@ -111,9 +107,5 @@ class WebSocketService2 {
             }, 1);
     }
 }
-
-// const WebSocketInstance = WebSocketService2.getInstance();
-
-// export default WebSocketInstance;
 
 export default WebSocketService2;

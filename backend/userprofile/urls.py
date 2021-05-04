@@ -1,7 +1,7 @@
+from traceback import print_tb
 from django.urls import path
-from .views import current_user, user_view 
+from . import views
 
 urlpatterns = [
-    path('current_user/', current_user),
-    path('access_user/', user_view)
+    path('create_user/', views.CreateUserEndpoint.as_view())
 ]

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
-from .views import chatroom, default, get_room_messages, get_chatrooms, get_messages
+from .views import chatroom, default, get_room_messages, get_chatrooms, get_messages, TestGetRoom
 from chat import views
 
 urlpatterns = [
@@ -9,6 +9,6 @@ urlpatterns = [
     path('chat/<str:chatrm_name>/', chatroom, name='chat-room'),
     path('loadchat/', get_room_messages),
     path('chatroom/<str:username>/', get_chatrooms),
-    # path('chatrooms/<int:pk>', views.ChatRoomList.as_view(), name='get-chatrooms'),
-    path('messages/<int:room_id>', get_messages, name='get-messages')
+    path('messages/<int:room_id>', get_messages, name='get-messages'),
+    path('chatrooms/<int:id>/', TestGetRoom.as_view())
 ]

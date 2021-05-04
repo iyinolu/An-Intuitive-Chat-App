@@ -34,7 +34,10 @@ class ChatRoom extends React.Component {
         })
         .then(res => res.json())
         .then(json => {
-            this.props.loadMessage(json)
+            var room_messages = {}
+            var roomid = this.props.room_info.id
+            room_messages[roomid] = json
+            this.props.loadMessage(room_messages)
             this.props.updateCurrentRoom(this.props.room_info.id)
             this.props.addOpenedRoom(this.props.room_info.id)
         })}

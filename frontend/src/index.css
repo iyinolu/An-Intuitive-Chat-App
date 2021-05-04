@@ -234,6 +234,7 @@ body {
   display: flex;
   flex-direction: column-reverse;
   padding: 0 20px;
+  padding-top: 10px;
   overflow-y: scroll;
   border-left: 1px solid #777;
 }
@@ -241,7 +242,7 @@ body {
 .message-row {
   display: grid;
   grid-template-columns: 70%;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .other-message {
@@ -275,6 +276,7 @@ body {
   padding: 9px 14px;
   font-size: 1.6rem;
   margin-bottom: 5px;
+  margin-top: 10px;
 }
 
 .message-time {
@@ -327,4 +329,10 @@ body {
   background: red;
   height: 200px;
   width: 200px;
+}
+
+.message-end {
+
+  height: 5px;
+  width: 100px;
 }
