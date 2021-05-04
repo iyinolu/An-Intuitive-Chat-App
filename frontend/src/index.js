@@ -6,11 +6,20 @@ import reportWebVitals from './reportWebVitals';
 import store from './store'
 import { Provider } from 'react-redux'
 
+import {BaseProvider, LightTheme} from 'baseui';
+import { Provider as StyletronProvider } from "styletron-react";
+import { Client as Styletron } from "styletron-engine-atomic";
+
+const engine = new Styletron();
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <StyletronProvider value={engine}>
+        <BaseProvider theme={LightTheme}>
+          <App />
+        </BaseProvider>
+      </StyletronProvider>,
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

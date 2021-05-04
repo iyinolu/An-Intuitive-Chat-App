@@ -15,14 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from rest_framework_jwt.views import obtain_jwt_token
 from django.urls.conf import include
+
+from rest_framework_jwt.views import ObtainJSONWebToken
+
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),    
     path('', include('chat.urls')),
     path('', include('userprofile.urls')),
-    # view to handle login (return a jwt token to handle later requests)
-    path('token-auth/', obtain_jwt_token)    
+    path('token_auth/', ObtainJSONWebToken.as_view())
 ]

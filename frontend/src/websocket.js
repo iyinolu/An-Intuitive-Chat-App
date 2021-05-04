@@ -1,6 +1,9 @@
 
-class WebSocketService {
+export class WebSocketService {
 
+    constructor() {
+        this.socketRef = null;
+    }
     static instance = null;
     callbacks = {};
     static getInstance() {
@@ -9,17 +12,13 @@ class WebSocketService {
         }
         return WebSocketService.instance;
     }
-    constructor() {
-        this.socketRef = null;
-    }
+    
 
     state() {
         return this.socketRef.readyState;
     }
 
     connect(room) {
-        
-        console.log('room')
         this.path = `ws://127.0.0.1:8000/ws/chat/${room}/`;
         
         this.socketRef = new WebSocket(this.path)

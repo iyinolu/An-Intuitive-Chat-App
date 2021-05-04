@@ -1,20 +1,38 @@
-/* eslint-disable no-unused-vars */
+
 import React, { useState } from 'react';
 import paperclip from '../utils/paperclip.svg';
+import { useSelector, useDispatch } from 'react-redux';
+
 
 export default function MessageInput(props) {
-    const [message, setMessage] = useState({text: ''})
-    
+    const [message, setMessage] = useState({text: ''}) 
+    const dispatch = useDispatch()   
+    const [current_room, username] = useSelector(state => {
+        return [state.chatroom.current_room, state.authenticate.username]
+    })
+    const room_connection = useSelector(state => {
+        if (current_room) {            
+            const room = state.chatroom.room_list.filter(room => room.id === current_room)
+            return room[0].connection
+        }
+        else {
+            return state 
+        }
+    })
     const messageChangeHandler = e => {
         setMessage({text: e.target.value})
     }
+    
     const sendMessageHandler = e => {
         e.preventDefault();
         const messageObject = {
-            from: 'admin',
+            room: current_room,
+            username: username,
             content: message.text
         }
-        props.ws_conn.newChatMessages(messageObject)
+        console.log(message.text)
+        console.log(room_connection)
+        room_connection.newChatMessages(messageObject)
         e.target.reset()
     }
 

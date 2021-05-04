@@ -29,9 +29,9 @@ class Room(models.Model):
         unique_together = ('friend', 'you',)
 
 class Message(models.Model):
-    chatroom = models.ForeignKey(Room, on_delete=models.CASCADE)
+    chatroom = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='Messages')
     user = models.ForeignKey(User, related_name='name', on_delete=models.CASCADE)
-    content = models.TextField(max_length=400)
+    content = models.TextField(max_length=400, blank=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
