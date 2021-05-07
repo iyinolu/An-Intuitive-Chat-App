@@ -1,3 +1,11 @@
+:root {
+  
+  --font-family: "DM Sans",-apple-system,BlinkMacSystemFont,"Helvetica Neue","Roboto",Roboto,Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  --code-font-family: Menlo,"Roboto Mono",Courier New,monospace;
+  --font-color: #495057;
+}
+
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -336,3 +344,31 @@ body {
   height: 5px;
   width: 100px;
 }
+
+.login-header {
+  display: flex;
+}
+
+.login-header img {
+  padding-right: 20px;
+  margin-bottom: 40px;
+}
+
+.site-bio p {
+  font-family: var(--font-family);
+  -webkit-font-smoothing: subpixel-antialiased;
+  font-size: 20px;
+  color: var(--font-color);
+}
+
+.site-name {
+  font-family: 'DM Mono', Georgia, serif;
+  -webkit-font-smoothing: subpixel-antialiased;
+  font-weight: 700px;
+}
+
+.login {
+  margin-bottom: 20px;
+  margin-left: 5px;
+}
+

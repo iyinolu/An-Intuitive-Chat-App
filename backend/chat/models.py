@@ -25,8 +25,11 @@ class Room(models.Model):
                 room_list.append(rooms.id)
         return room_list
 
+
+
+
     class Meta:
-        unique_together = ('friend', 'you',)
+        unique_together = ('friend', 'you')
 
 class Message(models.Model):
     chatroom = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='Messages')

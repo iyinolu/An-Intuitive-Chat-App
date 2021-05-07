@@ -23,7 +23,13 @@ function getCookie(name) {
 class ChatRoom extends React.Component {
     constructor(props) {
         super(props)
+        console.log(this.props.room_info)
+        this.pick_name = this.props.room_info.room_members[0] === this.props.username
+        this.room_name = this.pick_name ? 
+                        this.props.room_info.room_members[1] : 
+                        this.props.room_info.room_members[0]
     }
+
     loadMessages() {
         if (!this.props.rooms_id.includes(this.props.room_info.id)) {
             fetch(`http://127.0.0.1:8000/messages/${this.props.room_info.id}`, {
@@ -51,7 +57,7 @@ class ChatRoom extends React.Component {
             <a className="conversation active" id={this.props.room_info.id} onClick ={this.loadMessages.bind(this)}>
             <img height="20px" width="40px" src={defaultimg} alt="" />
             <div className="title-text"> 
-                {this.props.room_info.room_name}
+                {this.room_name}
             </div>
             <div className="created-date">
                 Apr 16

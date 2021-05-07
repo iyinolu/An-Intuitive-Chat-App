@@ -2,7 +2,10 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom';
+import webemoji from '../utils/webemoji.png'
 
+
+import {Notification, KIND} from 'baseui/notification';
 import {Input} from 'baseui/input';
 import {Button} from 'baseui/button';
 import { StyledLink } from "baseui/link";
@@ -25,7 +28,8 @@ export default function Login() {
         username: '',
         password: '',
         username_error: [false, ''],
-        password_error: [false, '']
+        password_error: [false, ''],
+        non_field_errors: false
     })
 
     const dispatch = useDispatch()
@@ -41,7 +45,16 @@ export default function Login() {
                 }
             })
             .catch(err => {
-                console.log(err)
+                console.log(Object.keys(err))
+                console.log(err.response)
+                if (err.response.data.non_field_errors) {
+                    console.log('hi')
+                    setState(prevstate => {
+                        const newState = { ...prevstate }
+                        newState['non_field_errors'] = true
+                        return newState
+                    })
+                }
                 if (err.response.data.username){
                     setState(prevstate => {
                         const newState = { ...prevstate }
@@ -71,12 +84,27 @@ export default function Login() {
         })
     }  
 
+    const error_notification = () => {
+        return (
+            <Notification kind={KIND.negative}>
+                Invalid login or password. Please try again.
+            </Notification>
+        )
+    }
+
     return (
         <div>
-            <Display4 marginBottom='scale1000'>Login</Display4>
+            <div className='login-header'>
+                <img height='50px' src={webemoji}></img>
+                <div className='site-bio'>
+                    <h1 className='site-name' marginBottom='scale100'>Welcome to WebChats</h1>
+                    <p>Chat on the web!</p>
+                </div>
+            </div>
+            <h2 className='login'>Login In</h2>
             <form onSubmit={e => handle_login(e, state)}>
+                {state.non_field_errors && error_notification()}
                 <FormControl
-                    label={() => "Username"}
                     error={state.username_error[1]}
                 >
                     <Input
@@ -98,7 +126,6 @@ export default function Login() {
                 </FormControl>
                 
                 <FormControl
-                    label={() => "Password"}
                     error={state.password_error[1]}
                 >
                     <Input
@@ -118,7 +145,7 @@ export default function Login() {
                     />
                 </FormControl>
                 <Button type='submit' startEnhancer={() => <ArrowRight size={24} />}>
-                    Submit
+                    Log In
                 </Button>
             </form> 
             <Paragraph2 marginTop='scale500' >Dont have an account? <Link to='/signup'> <StyledLink >sign up</StyledLink></Link></Paragraph2>
