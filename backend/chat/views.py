@@ -91,3 +91,8 @@ class TestGetRoom(MultipleRoomLookupMixin, generics.RetrieveAPIView):
         serializer_class = self.get_serializer_class()
         kwargs.setdefault('context', self.get_serializer_context())
         return serializer_class(*args, **kwargs, many=True)
+
+
+class AddUser(generics.CreateAPIView):
+    serializer_class = RoomSerializer
+    permission_classes = [permissions.AllowAny]
